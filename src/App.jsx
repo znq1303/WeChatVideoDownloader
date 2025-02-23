@@ -32,7 +32,7 @@ function App() {
           <Button
             className="App-inited-github"
             icon={<GithubOutlined />}
-            onClick={() => shell.openExternal('https://github.com/lecepin/WeChatVideoDownloader')}
+            onClick={() => shell.openExternal('https://github.com/xiaofu666/WeChatVideoDownloader')}
             type="primary"
             ghost
           >
