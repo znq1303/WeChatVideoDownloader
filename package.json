@@ -15,6 +15,9 @@
     "build-electron": "webpack --config webpack.electron.js",
     "build-all": "rm -rf ./build && rm -rf ./build-electron && npm run build-electron && npm run build-web",
     "pack": "npm run build-all && electron-builder",
+    "pack:win": "npm run build-all && electron-builder --win",
+    "pack:mac": "npm run build-all && electron-builder --mac",
+    "pack:all": "npm run build-all && electron-builder --win --mac",
     "gen-icon": "electron-icon-builder --input=./public/icon/icon.png --output=./public/icon",
     "pretty": "prettier -c --write \"(src/**/*|electron/**/*)\""
   },
@@ -31,7 +34,7 @@
     }
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.0.1",
     "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
     "electron": "^26.1.0",
@@ -105,7 +108,8 @@
         {
           "target": "nsis",
           "arch": [
-            "ia32"
+              "x64",
+              "ia32"
           ]
         }
       ],
