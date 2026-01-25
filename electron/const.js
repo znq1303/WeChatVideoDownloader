@@ -28,6 +28,7 @@ export default {
   CERT_PRIVATE_PATH: path.join(EXECUTABLE_PATH, './keys/private.pem'),
   CERT_PUBLIC_PATH: path.join(EXECUTABLE_PATH, './keys/public.pem'),
   INSTALL_CERT_FLAG: path.join(HOME_PATH, './installed.lock'),
+  WIN_CERT_MANUAL_INSTALL_FLAG: path.join(HOME_PATH, './manual_installed.lock'),
   WIN_CERT_INSTALL_HELPER: path.join(EXECUTABLE_PATH, './w_c.exe'),
   APP_CN_NAME: '微信视频号下载器',
   APP_EN_NAME: 'WeChat Video Downloader',
