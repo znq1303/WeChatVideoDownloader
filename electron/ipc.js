@@ -4,12 +4,20 @@ import { throttle } from 'lodash';
 import { startServer } from './proxyServer';
 import { installCert, checkCertInstalled } from './cert';
 import { downloadFile } from './utils';
+import fs from 'fs';
+import CONFIG from './const';
 
 let win;
 
 export default function initIPC() {
   ipcMain.handle('invoke_初始化信息', async (event, arg) => {
     return checkCertInstalled();
+  });
+
+  ipcMain.handle('invoke_标记证书已导入', async (event, arg) => {
+    // 创建标记文件，表示证书已手动导入
+    fs.writeFileSync(CONFIG.INSTALL_CERT_FLAG, '');
+    return true;
   });
 
   ipcMain.handle('invoke_开始初始化', (event, arg) => {

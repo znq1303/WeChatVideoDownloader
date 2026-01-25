@@ -1,6 +1,6 @@
 import { useMachine } from '@xstate/react';
 import { Table, Button, Progress, Alert } from 'antd';
-import { shell } from 'electron';
+import { shell, ipcRenderer } from 'electron';
 import {
   DownloadOutlined,
   PlaySquareOutlined,
@@ -122,7 +122,17 @@ function App() {
           <Alert message="首次进入，请先初始化~" type="warning" showIcon closable={false} />
           <Button
             size="large"
-            onClick={() => send('e_开始初始化')}
+            onClick={() => {
+              if (window.confirm('是否已手动导入证书？如果已导入，将跳过自动导入步骤。')) {
+                // 用户已手动导入证书，直接创建标记文件
+                ipcRenderer.invoke('invoke_标记证书已导入').then(() => {
+                  send('e_重新检测');
+                });
+              } else {
+                // 用户未手动导入证书，按原来逻辑执行
+                send('e_开始初始化');
+              }
+            }}
             type="primary"
             icon={<FormatPainterOutlined />}
           >
