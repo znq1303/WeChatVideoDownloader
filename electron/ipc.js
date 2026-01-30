@@ -2,13 +2,19 @@ import { ipcMain, dialog } from 'electron';
 import log from 'electron-log';
 import { throttle } from 'lodash';
 import { startServer } from './proxyServer';
-import { installCert, checkCertInstalled } from './cert';
+import { installCert, checkCertInstalled, checkManualCertInstall } from './cert';
 import { downloadFile } from './utils';
 
 let win;
 
 export default function initIPC() {
   ipcMain.handle('invoke_初始化信息', async (event, arg) => {
+    if (process.platform === 'win32' && !checkCertInstalled()) {
+      const isManualInstalled = await checkManualCertInstall();
+      if (isManualInstalled) {
+        return true;
+      }
+    }
     return checkCertInstalled();
   });
 

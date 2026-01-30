@@ -6,7 +6,32 @@ import { clipboard, dialog } from 'electron';
 import spawn from 'cross-spawn';
 
 export function checkCertInstalled() {
-  return fs.existsSync(CONFIG.INSTALL_CERT_FLAG);
+  return fs.existsSync(CONFIG.INSTALL_CERT_FLAG) || 
+         (process.platform === 'win32' && fs.existsSync(CONFIG.WIN_CERT_MANUAL_INSTALL_FLAG));
+}
+
+export async function checkManualCertInstall() {
+  if (process.platform !== 'win32') {
+    return false;
+  }
+  
+  const { dialog } = require('electron');
+  const result = dialog.showMessageBoxSync({
+    type: 'question',
+    buttons: ['是，已手动导入', '否，需要程序导入'],
+    defaultId: 1,
+    title: '证书导入确认',
+    message: '您是否已手动导入证书到系统？',
+    detail: '如果您已经手动将证书导入到系统受信任的根证书颁发机构，请选择"是"。否则程序将自动导入证书。'
+  });
+  
+  if (result === 0) {
+    mkdirp.sync(path.dirname(CONFIG.WIN_CERT_MANUAL_INSTALL_FLAG));
+    fs.writeFileSync(CONFIG.WIN_CERT_MANUAL_INSTALL_FLAG, '');
+    return true;
+  }
+  
+  return false;
 }
 
 export async function installCert(checkInstalled = true) {
